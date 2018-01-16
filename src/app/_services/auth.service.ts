@@ -5,6 +5,8 @@ import 'rxjs/add/operator/map';
 import 'rxjs/add/operator/catch';
 import 'rxjs/add/observable/throw';
 import { Observable } from 'rxjs/Observable';
+import { User } from '../_models/user';
+import { BehaviorSubject } from 'rxjs/BehaviorSubject';
 
 @Injectable()
 export class AuthService {
@@ -13,17 +15,25 @@ export class AuthService {
   userToken: any;
   decodedToken: any;
   jwtHelper: JwtHelper = new JwtHelper();
-
+  currentUser: User;
+  private photoUrl = new BehaviorSubject<string>('../../assets/user.png');
+  currentPhotoUrl = this.photoUrl.asObservable();
   constructor(private http: Http) { }
+
+  changeMemberPhoto(photoUrl: string) {
+    this.photoUrl.next(photoUrl);
+  }
 
   login(model: any) {
     return this.http.post(this.baseUrl + '/login', model, this.requestOptions()).map((response: Response) => {
       const user = response.json();
       if (user) {
         localStorage.setItem('token', user.tokenString);
+        localStorage.setItem('user', JSON.stringify(user.userFromDto));
         this.userToken = user.tokenString;
         this.decodedToken = this.jwtHelper.decodeToken(user.tokenString);
-        console.log(this.decodedToken);
+        this.currentUser = user.userFromDto;
+        this.changeMemberPhoto(this.currentUser.photoUrl);
       }
     }).catch(this.handleError);
   }
