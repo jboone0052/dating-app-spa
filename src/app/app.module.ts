@@ -2,9 +2,9 @@ import { MemberEditResolver } from './_resolvers/member-edit.resolver';
 import { BrowserModule } from '@angular/platform-browser';
 import { HttpModule } from '@angular/http';
 import { NgModule } from '@angular/core';
-import { FormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
-import { BsDropdownModule, TabsModule } from 'ngx-bootstrap';
+import { BsDropdownModule, TabsModule, BsDatepickerModule } from 'ngx-bootstrap';
 import { NgxGalleryModule } from 'ngx-gallery';
 
 
@@ -49,12 +49,14 @@ import { FileUploadModule } from 'ng2-file-upload/file-upload/file-upload.module
     BrowserModule,
     HttpModule,
     FormsModule,
+    ReactiveFormsModule,
     BsDropdownModule.forRoot(),
     RouterModule.forRoot(appRoutes),
     TabsModule.forRoot(),
+    BsDatepickerModule.forRoot(),
     AuthModule,
     NgxGalleryModule,
-  FileUploadModule
+    FileUploadModule
   ],
   providers: [
     AuthService,

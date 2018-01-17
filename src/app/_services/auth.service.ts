@@ -24,7 +24,7 @@ export class AuthService {
     this.photoUrl.next(photoUrl);
   }
 
-  login(model: any) {
+  login(model: User) {
     return this.http.post(this.baseUrl + '/login', model, this.requestOptions()).map((response: Response) => {
       const user = response.json();
       if (user) {
@@ -33,12 +33,12 @@ export class AuthService {
         this.userToken = user.tokenString;
         this.decodedToken = this.jwtHelper.decodeToken(user.tokenString);
         this.currentUser = user.userFromDto;
-        this.changeMemberPhoto(this.currentUser.photoUrl);
+        this.changeMemberPhoto(this.currentUser.photoUrl || '../../assets/user.png');
       }
     }).catch(this.handleError);
   }
 
-  register(model: any) {
+  register(model: User) {
     return this.http.post(this.baseUrl + '/register', model, this.requestOptions()).catch(this.handleError);
   }
 
