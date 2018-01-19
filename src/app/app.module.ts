@@ -4,7 +4,7 @@ import { HttpModule } from '@angular/http';
 import { NgModule } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
-import { BsDropdownModule, TabsModule, BsDatepickerModule } from 'ngx-bootstrap';
+import { BsDropdownModule, TabsModule, BsDatepickerModule, PaginationModule } from 'ngx-bootstrap';
 import { NgxGalleryModule } from 'ngx-gallery';
 
 
@@ -29,6 +29,7 @@ import { MemberEditComponent } from './members/member-edit/member-edit.component
 import { PreventUnsavedChanges } from './_guards/prevent-unsaved-changes.guard';
 import { PhotoEditorComponent } from './members/photo-editor/photo-editor.component';
 import { FileUploadModule } from 'ng2-file-upload/file-upload/file-upload.module';
+import {TimeAgoPipe} from 'time-ago-pipe';
 
 
 @NgModule({
@@ -43,7 +44,8 @@ import { FileUploadModule } from 'ng2-file-upload/file-upload/file-upload.module
     MemberCardComponent,
     MemberDetailComponent,
     MemberEditComponent,
-    PhotoEditorComponent
+    PhotoEditorComponent,
+    TimeAgoPipe
 ],
   imports: [
     BrowserModule,
@@ -54,6 +56,7 @@ import { FileUploadModule } from 'ng2-file-upload/file-upload/file-upload.module
     RouterModule.forRoot(appRoutes),
     TabsModule.forRoot(),
     BsDatepickerModule.forRoot(),
+    PaginationModule.forRoot(),
     AuthModule,
     NgxGalleryModule,
     FileUploadModule
