@@ -15,7 +15,7 @@ export class UserService {
 
   constructor(private authHttp: AuthHttp) { }
 
-  getUsers(page?: number, itemsPerPage?: number, userParams?: any) {
+  getUsers(page?: number, itemsPerPage?: number, userParams?: any, likesParam?: string) {
     const paginatedResult: PaginatedResult<User[]> = new PaginatedResult<User[]>();
     let queryString = '?';
 
@@ -23,10 +23,20 @@ export class UserService {
       queryString += 'pageNumber=' + page + '&pageSize=' + itemsPerPage + '&';
     }
 
+    if (likesParam === 'likers') {
+      queryString += 'likers=true&';
+    }
+
+    if (likesParam === 'likees') {
+      queryString += 'likees=true&';
+    }
+
     if (userParams != null) {
       queryString += 'minAge=' + userParams.minAge + '&maxAge=' + userParams.maxAge +
       '&gender=' + userParams.gender + '&orderBy=' + userParams.orderBy;
     }
+
+
 
     return this.authHttp.get(this.baseUrl + 'users' + queryString)
       .map((response: Response) => {
@@ -56,11 +66,19 @@ export class UserService {
   }
 
   deletePhoto(userId: number, photoId: number) {
-    return this.authHttp.delete(this.baseUrl + 'users/'+ userId + '/photos/' + photoId)
+    return this.authHttp.delete(this.baseUrl + 'users/ ' + userId + '/photos/' + photoId)
+      .catch(this.handleError);
+  }
+
+  sendLike(id: number, recipientId: number) {
+    return this.authHttp.post(this.baseUrl + 'users/' + id + '/like/' + recipientId, {})
       .catch(this.handleError);
   }
 
   private handleError(error: any) {
+    if (error.status === 400) {
+      return Observable.throw(error._body);
+    }
     const applicationError = error.headers.get('Application-Error');
     if (applicationError) {
       return Observable.throw(applicationError);

@@ -31,6 +31,7 @@ import { PhotoEditorComponent } from './members/photo-editor/photo-editor.compon
 import { FileUploadModule } from 'ng2-file-upload/file-upload/file-upload.module';
 import {TimeAgoPipe} from 'time-ago-pipe';
 import { ButtonsModule } from 'ngx-bootstrap/buttons/buttons.module';
+import { ListResolver } from './_resolvers/list.resolver';
 
 
 @NgModule({
@@ -71,7 +72,8 @@ import { ButtonsModule } from 'ngx-bootstrap/buttons/buttons.module';
     UserService,
     MemberDetailResolver,
     MemberListResolver,
-    MemberEditResolver
+    MemberEditResolver,
+    ListResolver
   ],
   bootstrap: [AppComponent]
 })
