@@ -1,3 +1,4 @@
+import { MessageResolver } from './_resolvers/message.resolver';
 import { MemberEditResolver } from './_resolvers/member-edit.resolver';
 import { MemberEditComponent } from './members/member-edit/member-edit.component';
 import { MemberDetailComponent } from './members/member-detail/member-detail.component';
@@ -24,7 +25,7 @@ export const appRoutes: Routes = [
       resolve: { user: MemberEditResolver },
       canDeactivate: [PreventUnsavedChanges]
     },
-    { path: 'messages', component: MessagesComponent },
+    { path: 'messages', component: MessagesComponent, resolve: {messages: MessageResolver} },
     { path: 'lists', component: ListsComponent, resolve: { users: ListResolver } },
   ]},
   { path: '**', redirectTo: 'home', pathMatch: 'full' }

@@ -1,3 +1,5 @@
+import { Message } from './../_models/message';
+import { PaginatedResult } from './../_models/pagination';
 import { JwtHelper, AuthHttp } from 'angular2-jwt';
 import { Injectable } from '@angular/core';
 import { environment } from '../../environments/environment';
@@ -7,7 +9,6 @@ import { Observable } from 'rxjs/Observable';
 import 'rxjs/add/operator/map';
 import 'rxjs/add/operator/catch';
 import 'rxjs/add/observable/throw';
-import { PaginatedResult } from '../_models/pagination';
 
 @Injectable()
 export class UserService {
@@ -75,6 +76,34 @@ export class UserService {
       .catch(this.handleError);
   }
 
+  getMessages(userId: number, page?: number, itemsPerPage?: number, messageContainer?: string) {
+    const paginatedResult: PaginatedResult<Message[]> = new PaginatedResult<Message[]>();
+    let queryString = '?messageContainer=' + messageContainer + '&';
+
+    if (page != null && itemsPerPage != null) {
+      queryString += 'pageNumber=' + page + '&pageSize=' + itemsPerPage + '&';
+    }
+
+    return this.authHttp.get(this.baseUrl + 'users/' + userId + '/messages' + queryString).map((response: Response) => {
+      paginatedResult.result = response.json();
+        if (response.headers.get('pagination') != null) {
+          paginatedResult.pagination = JSON.parse(response.headers.get('pagination'));
+        }
+        return paginatedResult;
+    }).catch(this.handleError);
+  }
+
+  getMessageThread(userId: number, recipientId: number) {
+    return this.authHttp.get(this.baseUrl + 'users/' + userId + '/messages/thread/' + recipientId).map((response: Response) => {
+      return response.json();
+    }).catch(this.handleError);
+  }
+
+  sendMessage(id: number, message: Message) {
+    return this.authHttp.post(this.baseUrl + 'users/' + id + '/messages', message).map((response: Response) => {
+      return response.json();
+    }).catch(this.handleError);
+  }
   private handleError(error: any) {
     if (error.status === 400) {
       return Observable.throw(error._body);
